@@ -222,8 +222,14 @@ class AirCargoProblem(Problem):
         conditions by ignoring the preconditions required for an action to be
         executed.
         """
-        # TODO implement (see Russell-Norvig Ed-3 10.2.3  or Russell-Norvig Ed-2 11.2)
+        
         count = 0
+        kb = PropKB()
+        kb.tell(decode_state(node.state, self.state_map).pos_sentence())
+
+        for clause in self.goal:
+            if clause not in kb.clauses:
+                count += 1
         return count
 
 
@@ -340,10 +346,73 @@ def air_cargo_p3() -> AirCargoProblem:
     """
     Init(At(C1, SFO) ∧ At(C2, JFK) ∧ At(C3, ATL) ∧ At(C4, ORD) 
     ∧ At(P1, SFO) ∧ At(P2, JFK) 
+
     ∧ Cargo(C1) ∧ Cargo(C2) ∧ Cargo(C3) ∧ Cargo(C4)
     ∧ Plane(P1) ∧ Plane(P2)
     ∧ Airport(JFK) ∧ Airport(SFO) ∧ Airport(ATL) ∧ Airport(ORD))
+    
     Goal(At(C1, JFK) ∧ At(C3, JFK) ∧ At(C2, SFO) ∧ At(C4, SFO))
     """
 
+    # Objects definition: cargos, plane and airports, as lists
+    cargos = ['C1', 'C2', 'C3', 'C4'] 
+    planes = ['P1', 'P2'] # two planes to carry/transport four cargos from/to four airports
+    airports = ['JFK', 'SFO', 'ATL', 'ORD']
+
+    # Positive preconditions (to satisfy)
+    pos = [expr('At(C1, SFO)'),
+           expr('At(C2, JFK)'),
+           expr('At(C3, ATL)'),
+           expr('At(C4, ORD)'),
+           expr('At(P1, SFO)'),
+           expr('At(P2, JFK)'),
+           ]
+
+    # Negative preconditions - possible states 
+
+    neg = [expr('At(C2, SFO)'), # Goal
+           expr('At(C2, ATL)'),
+           expr('At(C2, ORD)'),  
+           expr('In(C2, P1)'),  
+           expr('In(C2, P2)'),  
     
+          
+           expr('At(C1, JFK)'), # Goal
+           expr('At(C1, ATL)'),
+           expr('At(C1, ORD)'),
+           expr('In(C1, P1)'), 
+           expr('In(C1, P2)'),
+         
+
+           expr('At(C3, JFK)'), # Goal
+           expr('At(C3, SFO)'),
+           expr('At(C3, ORD)'), 
+           expr('In(C3, P1)'), 
+           expr('In(C3, P2)'),
+        
+           expr('At(C4, JFK)'),
+           expr('At(C4, SFO)'), # Goal
+           expr('At(C4, ATL)'), 
+           expr('In(C4, P1)'), 
+           expr('In(C4, P2)'), 
+           
+           expr('At(P1, JFK)'),
+           expr('At(P1, ATL)'),
+           expr('At(P1, ORD)'),
+           expr('At(P2, SFO)'),
+           expr('At(P2, ATL)'),
+           expr('At(P2, ORD)'),
+           ]       
+
+    init = FluentState(pos, neg)       
+
+
+    # Goal(At(C1, JFK) ∧ At(C3, JFK) ∧ At(C2, SFO) ∧ At(C4, SFO))
+    goal = [expr('At(C1, JFK)'),
+            expr('At(C2, SFO)'),
+            expr('At(C3, JFK)'),
+            expr('At(C4, SFO)'),
+            ]
+    return AirCargoProblem(cargos, planes, airports, init, goal)
+
+
