@@ -152,7 +152,7 @@ class AirCargoProblem(Problem):
             if is_possible:
                 possible_actions.append(action)
         
-        return possible_actions #list
+        return possible_actions #list based on the existing preconditions 
 
     def result(self, state: str, action: Action):
         """ Return the state that results from executing the given
@@ -164,6 +164,10 @@ class AirCargoProblem(Problem):
         :return: resulting state after action
         """
         
+        # from AIMA 12.3.3 Physical objects can be viewed as generalized events -a chunk space-time-, not as the 
+        # object itself, but the events that made the object possible throughtout space and time. We can describe the 
+        # changing properties of the object using state fluents. 
+
         new_state = FluentState([], [])
         old_state = decode_state(state, self.state_map)
         for fluent in old_state.pos:
@@ -224,24 +228,45 @@ class AirCargoProblem(Problem):
 
 
 def air_cargo_p1() -> AirCargoProblem:
-    cargos = ['C1', 'C2']
+    """
+    Init(At(C1, SFO) ∧ At(C2, JFK) 
+    ∧ At(P1, SFO) ∧ At(P2, JFK) 
+
+    ∧ Cargo(C1) ∧ Cargo(C2) 
+    ∧ Plane(P1) ∧ Plane(P2)
+    ∧ Airport(JFK) ∧ Airport(SFO))
+
+    Goal(At(C1, JFK) ∧ At(C2, SFO))
+    """
+    # Objects definition: cargos, plane and airports, as lists
+    cargos = ['C1', 'C2'] 
     planes = ['P1', 'P2']
     airports = ['JFK', 'SFO']
+
+    # Positive preconditions (to satisfy)
     pos = [expr('At(C1, SFO)'),
            expr('At(C2, JFK)'),
            expr('At(P1, SFO)'),
            expr('At(P2, JFK)'),
            ]
-    neg = [expr('At(C2, SFO)'),
-           expr('In(C2, P1)'),
-           expr('In(C2, P2)'),
-           expr('At(C1, JFK)'),
-           expr('In(C1, P1)'),
-           expr('In(C1, P2)'),
-           expr('At(P1, JFK)'),
-           expr('At(P2, SFO)'),
+
+    # Negative preconditions: cargo C2 is not at SFO, as C2 is initially at JFK, etc.        
+    neg = [expr('At(C2, SFO)'), # negative initally, but it satisfies the goal
+           expr('In(C2, P1)'),  # C2 could be in P1, 
+           expr('In(C2, P2)'),  # C2 could be in P2 ...the cargo is not in the plain, is at the airport 
+           expr('At(C1, JFK)'), # initially cargo1 is not at JFK as is at SFO 
+           expr('In(C1, P1)'),  # C1 could be in P1
+           expr('In(C1, P2)'),  # or could be in P2 
+           expr('At(P1, JFK)'), # initially P1 is not at JFK (as it's at SFO) 
+           expr('At(P2, SFO)'), # initially P2 is not at SFO as it's at JFK
            ]
     init = FluentState(pos, neg)
+
+
+    # the goal only indicates to switch the cargos btw airports, initally C1 is at SFO and the goal is C1 at JFK. 
+    # Actually this cargo could be transported by any plane at the airport (precond: plane has to be at the airport)
+    # However, the plane we have available is  P1, but the goal doesn't specify which plane has to carry the cargo. 
+    
     goal = [expr('At(C1, JFK)'),
             expr('At(C2, SFO)'),
             ]
@@ -249,10 +274,76 @@ def air_cargo_p1() -> AirCargoProblem:
 
 
 def air_cargo_p2() -> AirCargoProblem:
-    # TODO implement Problem 2 definition
-    pass
+    """
+    Init(At(C1, SFO) ∧ At(C2, JFK) ∧ At(C3, ATL) 
+    ∧ At(P1, SFO) ∧ At(P2, JFK) ∧ At(P3, ATL) 
+
+    ∧ Cargo(C1) ∧ Cargo(C2) ∧ Cargo(C3)
+    ∧ Plane(P1) ∧ Plane(P2) ∧ Plane(P3)
+    ∧ Airport(JFK) ∧ Airport(SFO) ∧ Airport(ATL))
+
+    Goal(At(C1, JFK) ∧ At(C2, SFO) ∧ At(C3, SFO))
+    """
+    # Objects definition: cargos, plane and airports, as lists
+    cargos = ['C1', 'C2', 'C3'] 
+    planes = ['P1', 'P2', 'P3']
+    airports = ['JFK', 'SFO', 'ATL']
+
+    # Positive preconditions (to satisfy)
+    pos = [expr('At(C1, SFO)'),
+           expr('At(C2, JFK)'),
+           expr('At(C3, ATL)'),
+           expr('At(P1, SFO)'),
+           expr('At(P2, JFK)'),
+           expr('At(P3, ATL)'),
+           ]
+
+
+    # Negative preconditions - possible states 
+
+    neg = [expr('At(C2, SFO)'), # goal
+           expr('At(C2, ATL)'), 
+           expr('In(C2, P1)'),  
+           expr('In(C2, P2)'),  
+           expr('In(C2, P3)'),
+          
+           expr('At(C1, JFK)'), # goal
+           expr('At(C1, ATL)'),
+           expr('In(C1, P1)'), 
+           expr('In(C1, P2)'),
+           expr('In(C1, P3)'),
+
+           expr('At(C3, JFK)'),
+           expr('At(C3, SFO)'), # goal
+           expr('In(C3, P1)'), 
+           expr('In(C3, P2)'),
+           expr('In(C3, P3)'),
+           
+           expr('At(P1, JFK)'),
+           expr('At(P1, ATL)'),
+           expr('At(P2, SFO)'),
+           expr('At(P2, ATL)'),
+           expr('At(P3, SFO)'),
+           expr('At(P3, JFK)'),
+           ]       
+
+    init = FluentState(pos, neg)       
+
+    goal = [expr('At(C1, JFK)'),
+            expr('At(C2, SFO)'),
+            expr('At(C3, SFO)'),
+            ]
+    return AirCargoProblem(cargos, planes, airports, init, goal)
 
 
 def air_cargo_p3() -> AirCargoProblem:
-    # TODO implement Problem 3 definition
-    pass
+    """
+    Init(At(C1, SFO) ∧ At(C2, JFK) ∧ At(C3, ATL) ∧ At(C4, ORD) 
+    ∧ At(P1, SFO) ∧ At(P2, JFK) 
+    ∧ Cargo(C1) ∧ Cargo(C2) ∧ Cargo(C3) ∧ Cargo(C4)
+    ∧ Plane(P1) ∧ Plane(P2)
+    ∧ Airport(JFK) ∧ Airport(SFO) ∧ Airport(ATL) ∧ Airport(ORD))
+    Goal(At(C1, JFK) ∧ At(C3, JFK) ∧ At(C2, SFO) ∧ At(C4, SFO))
+    """
+
+    
