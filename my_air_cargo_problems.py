@@ -166,7 +166,8 @@ class AirCargoProblem(Problem):
         
         # from AIMA 12.3.3 Physical objects can be viewed as generalized events -a chunk space-time-, not as the 
         # object itself, but the events that made the object possible throughtout space and time. We can describe the 
-        # changing properties of the object using state fluents. 
+        # changing properties of the object using state fluents. Fluent, synonym of state vriable, to refer an aspecto of the 
+        # world that changes. 
 
         new_state = FluentState([], [])
         old_state = decode_state(state, self.state_map)
@@ -222,7 +223,6 @@ class AirCargoProblem(Problem):
         conditions by ignoring the preconditions required for an action to be
         executed.
         """
-        
         count = 0
         kb = PropKB()
         kb.tell(decode_state(node.state, self.state_map).pos_sentence())
@@ -232,9 +232,12 @@ class AirCargoProblem(Problem):
                 count += 1
         return count
 
-
 def air_cargo_p1() -> AirCargoProblem:
     """
+    All problems are in the Air Cargo domain. 
+    Initial states and goals for Air Cargo Problem 1
+    PDDL description of this air cargo transportation planning problem:
+
     Init(At(C1, SFO) ∧ At(C2, JFK) 
     ∧ At(P1, SFO) ∧ At(P2, JFK) 
 
@@ -256,7 +259,7 @@ def air_cargo_p1() -> AirCargoProblem:
            expr('At(P2, JFK)'),
            ]
 
-    # Negative preconditions: cargo C2 is not at SFO, as C2 is initially at JFK, etc.        
+    # Negative preconditions:         
     neg = [expr('At(C2, SFO)'), # negative initally, but it satisfies the goal
            expr('In(C2, P1)'),  # C2 could be in P1, 
            expr('In(C2, P2)'),  # C2 could be in P2 ...the cargo is not in the plain, is at the airport 
@@ -281,6 +284,10 @@ def air_cargo_p1() -> AirCargoProblem:
 
 def air_cargo_p2() -> AirCargoProblem:
     """
+    All problems are in the Air Cargo domain. 
+    Initial states and goals for Air Cargo Problem 1
+    PDDL description of this air cargo transportation planning problem:
+
     Init(At(C1, SFO) ∧ At(C2, JFK) ∧ At(C3, ATL) 
     ∧ At(P1, SFO) ∧ At(P2, JFK) ∧ At(P3, ATL) 
 
@@ -344,6 +351,10 @@ def air_cargo_p2() -> AirCargoProblem:
 
 def air_cargo_p3() -> AirCargoProblem:
     """
+    All problems are in the Air Cargo domain. 
+    Initial states and goals for Air Cargo Problem 1
+    PDDL description of this air cargo transportation planning problem:
+    
     Init(At(C1, SFO) ∧ At(C2, JFK) ∧ At(C3, ATL) ∧ At(C4, ORD) 
     ∧ At(P1, SFO) ∧ At(P2, JFK) 
 
