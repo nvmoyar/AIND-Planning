@@ -30,9 +30,9 @@ By the end of this project, we will have the following algorithms:
 * uniform cost search: uninformed
 * recursive best first search: theoretically informed, formally uninformed
 * greedy best first graph search with h_1: theoretically informed, formally uninformed
-* astar search with h_1: theoretically informed, formally uninformed
-* astar search with h ignore preconditions: informed (full use of heuristics)
-* astar search h pg levelsum: informed (full use of heuristics)
+* A* search with h_1: theoretically informed, formally uninformed
+* A* search with h ignore preconditions: informed (full use of heuristics)
+* A* search h pg levelsum: informed (full use of heuristics)
 
 ### Comparison of the nature of the different algorigthms implemented
 
@@ -42,7 +42,7 @@ Among **Breadth-first** and **breadth tree algorithm** , the main difference is 
 
 Both **Depth-first** and **Depth-limited** algorithms are aimed to find the longest path in a non-optimal way. The main difference is the branching factor due to the imposition of exploring the search space 50 times, producing several redundant paths on the search tree. Depth algorithms are not optimal as they might overlook the goal. Depth-limited has some advantages over Depth-first, since forcing the algorithm to search stop at some level, completeness can be imposed preventing those cases where the branching factor is infinite. However, for these problems complexity, the depth-limited search algorithm has a worse performance as more redundancy is being added.
 
-Regarding the **uniform cost search**, it expands nodes according to their optimal path cost. Compared to Breadth-first search, uniform-cost search will keep expanding nodes, trying to evaluate if there is any node goal-satisfying with lower cost meanwhile the breadth-first search algorithm will stop early once it finds a goal state.
+Regarding the **Uniform cost search**, it expands nodes according to their optimal path cost. Compared to Breadth-first search, uniform-cost search will keep expanding nodes, trying to evaluate if there is any node goal-satisfying with lower cost meanwhile the breadth-first search algorithm will stop early once it finds a goal state.
 
 * **Informed (Heuristic search)**
 
@@ -60,7 +60,7 @@ Recursive Best First is a memory-bounded search algorithm, similar to recursive 
 
 ### Observations and conclusions
 
-In general, considering the search space for the either of the cargo problems and taking into account that all the paths have the same search cost, it seems reasonable to choose the breadth-first search, as it performs a reasonable number of actions needed with the minimum depth in the search space. It must be noticed that depth-first graph search is able to find a goal state on the way to find the deepest node with fewer node expansions and thus, expending less time. However, it cannot be guaranteed that always would work this way independently of the problem. Certainly, the metrics thrown by depth-first are fair enough for all these problems, though -please see the next section ‘Data’ in order to explore metrics-. Please see ![Heuristics Analysis][report]
+In general, considering the search space for the either of the cargo problems and taking into account that all the paths have the same search cost, it seems reasonable to choose the breadth-first search, as it performs a reasonable number of actions needed with the minimum depth in the search space. It must be noticed that depth-first graph search is able to find a goal state on the way to find the deepest node with fewer node expansions and thus, expending less time. However, it cannot be guaranteed that always would work this way independently of the problem. Certainly, the metrics thrown by depth-first are fair enough for all these problems, though -please see the next section ‘Data’ in order to explore metrics-. Please see [Heuristics Analysis][report], last part 'Data' section. 
 
 Uniform-cost algorithm for P2 and P3, has the better performance despite the number of nodes expanded, due to the implementation of the PriorityQueue, is more expensive to use, than the FIFO queue. Anyway, as the all the node steps have the same cost, in this case, it could be seen the Breadth-first search as the cheapest algorithm from the uninformed list. 
 
