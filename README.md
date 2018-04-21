@@ -56,7 +56,7 @@ The greedy algorithm is going to try to get as close as it can to the goal state
 
 * A* + level-sum is a planning graph heuristics that treat the problem as independent subgoals, returning the sum of the level costs of the goals
 
-Recursive Best First is a memory-bounded search algorithm, similar to recursive depth-first search, but rather than continuing indefinitely down the current path, it uses a limit variable. If the current node exceeds this limit, the recursion unwinds back to the alternative path. This algorithm can provide a solution, in this case, using a memoization technique, in those cases when the search space is so complex, that A* runs out of memory. 
+Recursive Best First is a memory-bounded search algorithm, similar to recursive depth-first search, but rather than continuing indefinitely down the current path, it uses a limit variable. If the current node exceeds this limit, the recursion unwinds back to the alternative path. This algorithm can provide a solution, in this case, using a memoization technique, in those cases when the search space is so complex, that A* runs out of memory.
 
 ### Observations and conclusions
 
