@@ -2,7 +2,7 @@
 
 ## Create a Domain Independent Planner (Implement a Planning Search agent)
 
-[image1]: ./planning_screenshot.png "Planning Search agent"
+[image1]: ./images/planning_screenshot.png "Planning Search agent"
 [report]: ./heuristic_analysis.pdf "Heuristics Analysis"
 
 ### Project Overview and Discussion Report
