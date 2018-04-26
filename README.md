@@ -1,4 +1,4 @@
-# Artificial Inte# Artificial Intelligence Engineer Nanodegree
+# Artificial Intelligence Engineer Nanodegree
 
 ## Create a Domain Independent Planner (Implement a Planning Search agent)
 
